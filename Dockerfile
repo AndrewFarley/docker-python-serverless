@@ -1,15 +1,19 @@
 FROM amazonlinux
 
-# First, make able to install Node 6.x from upstream
-# Second, install Python3.6, GCC, Make and MySQL-devel for native Python modules and a CLI editor and findutils for CI scripting
-# Third, install the serverless framework globally
-# Fourth, install/upgrade pip, awscli, mysqlclient for both Python 2.7 and Python 3.6
-# Fifth, clean up after ourselves
+# Make able to install Node 6.x from upstream
+# Install Python3.6 and Python2.7 with pip and devel
+# Install GCC, Make and MySQL-devel, NodeJS, Nano, findutils, and libyaml for parsing .yml (serverless) via Python
+# Clean-up after ourselves
 RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | bash - && \
-  yum install -y python36 python36-pip gcc-c++ make mysql-devel python36-devel python27-devel python27-pip nodejs nano findutils && \
-  npm install -g serverless && \
-  pip-3.6 install --no-cache-dir --upgrade pip awscli mysqlclient && \
-  pip-2.7 install --no-cache-dir --upgrade pip awscli mysqlclient && \
+  yum install -y python36-pip python36-devel python27-devel python27-pip \
+  gcc-c++ make mysql-devel nodejs nano findutils libyaml libyaml-devel && \
   yum clean all
 
+# Install the serverless framework globally
+RUN npm install -g serverless
+
+# Install/upgrade pip, awscli, mysqlclient for both Python 2.7 and Python 3.6
+RUN pip-3.6 install --no-cache-dir --upgrade pip awscli mysqlclient pyyaml && \
+  pip-2.7 install --no-cache-dir --upgrade pip awscli mysqlclient pyyaml
+  
 ENTRYPOINT ["/bin/bash", "-c"]
