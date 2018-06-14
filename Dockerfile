@@ -6,7 +6,7 @@ FROM amazonlinux
 # Clean-up after ourselves
 RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | bash - && \
   yum install -y python36-pip python36-devel python27-devel python27-pip \
-  gcc-c++ make mysql-devel nodejs nano findutils libyaml libyaml-devel && \
+  gcc-c++ make mysql-devel nodejs nano findutils libyaml libyaml-devel git && \
   yum clean all
 
 # Install the serverless framework globally
